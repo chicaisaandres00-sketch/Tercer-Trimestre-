@@ -1,0 +1,45 @@
+#include <SPI.h>
+#include <XPT2046_Touchscreen.h>
+
+// Pines touch CYD
+#define T_IRQ 36
+#define T_CS 33
+#define T_MOSI 32
+#define T_MISO 39
+#define T_CLK 25
+
+SPIClass touchSPI(VSPI);
+XPT2046_Touchscreen touch(T_CS, T_IRQ);
+
+void setup() {
+
+Serial.begin(115200);
+delay(1000);
+
+// iniciar SPI del touch
+touchSPI.begin(T_CLK, T_MISO, T_MOSI, T_CS);
+
+touch.begin();
+touch.setRotation(1);
+
+Serial.println("Touch listo...");
+}
+
+void loop() {
+
+if (touch.touched()) {
+
+TS_Point p = touch.getPoint();
+
+Serial.print("X: ");
+Serial.print(p.x);
+
+Serial.print("  Y: ");
+Serial.print(p.y);
+
+Serial.print("  Z: ");
+Serial.println(p.z);
+
+delay(200);
+}
+}
